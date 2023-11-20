@@ -1,13 +1,13 @@
 final class StringConstants {
-  static const List<String> days = [
-    'Pazartesi',
-    'Salı',
-    'Çarşamba',
-    'Perşembe',
-    'Cuma',
-    'Cumartesi',
-    'Pazar',
-  ];
+  static const Map<int, String> days = {
+    1: 'Pazartesi',
+    2: 'Salı',
+    3: 'Çarşamba',
+    4: 'Perşembe',
+    5: 'Cuma',
+    6: 'Cumartesi',
+    7: 'Pazar',
+  };
 
   static const showDialogNoteGiriniz = 'Note Giriniz';
   static const showDialogIconGiriniz = 'Icon Ekle';

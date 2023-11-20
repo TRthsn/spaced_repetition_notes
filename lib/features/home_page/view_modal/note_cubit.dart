@@ -7,7 +7,7 @@ import 'package:spaced_repetition_notes/service/modal/note.dart';
 import 'package:spaced_repetition_notes/service/modal/note_item.dart';
 
 class NoteCubit extends Cubit<CubitBaseState> {
-  NoteCubit(this.cacheManager) : super(CubitInitialState()) {}
+  NoteCubit(this.cacheManager) : super(CubitInitialState());
   final CacheManager cacheManager;
   final time = DateTime.now();
   int currentStep = DateTime.now().weekday;
