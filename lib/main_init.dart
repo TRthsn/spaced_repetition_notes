@@ -9,8 +9,8 @@ final class MainInit {
     await Hive.initFlutter();
     Hive.registerAdapter(NoteAdapter());
     Hive.registerAdapter(NoteItemAdapter());
-    await Hive.openBox<Note>('Notes');
     await Hive.openBox<NoteItem>('NoteItems');
+    await Hive.openBox<Note>('Notes');
     Bloc.observer = const CubitObserver();
   }
 }

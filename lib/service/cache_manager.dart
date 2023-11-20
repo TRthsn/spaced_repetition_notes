@@ -9,7 +9,7 @@ class CacheManager {
   static CacheManager? _cacheManager;
 
   final noteItemBox = Hive.box<NoteItem>('NoteItems');
-  final noteBox = Hive.box<Note>('NoteItems');
+  final noteBox = Hive.box<Note>('Notes');
 
   Future<void> addNote(NoteItem item) async {
     final currentDayNote = noteBox.get(item.time.toNoteId());
