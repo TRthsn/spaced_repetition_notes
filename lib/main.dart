@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:spaced_repetition_notes/app/theme/theme_dark.dart';
 import 'package:spaced_repetition_notes/app/theme/theme_light.dart';
 import 'package:spaced_repetition_notes/features/home_page/view/home_page_view.dart';
+import 'package:spaced_repetition_notes/main_init.dart';
 
-void main() {
+Future<void> main() async {
+  await MainInit().startProject();
   runApp(const MainApp());
 }
 
