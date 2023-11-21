@@ -27,9 +27,8 @@ class HomePageView extends StatelessWidget {
                 if (stepIndex == 6) {
                   return const Icon(Icons.visibility);
                 } else {
-                  const Icon(Icons.access_alarm_outlined);
+                  return const Icon(Icons.access_alarm_outlined);
                 }
-                return null;
               },
               onStepTapped: (value) =>
                   context.read<NoteCubit>().changeStep(value),
@@ -41,33 +40,111 @@ class HomePageView extends StatelessWidget {
                 for (int dayLater = 6; dayLater > -1; dayLater--)
                   Step(
                     isActive: context.watch<NoteCubit>().currentStep ==
-                        currentTime.add(Duration(days: dayLater)).weekday,
-                    title: Row(
+                        context.read<NoteCubit>().getIndex(),
+                    title: FittedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                StringConstants.days[currentTime
+                                        .addDays(dayLater)
+                                        .weekday] ??
+                                    'Error',
+                                style: dayLater == 0
+                                    ? const TextStyleConstants
+                                        .noteCaptionCurrentDay()
+                                    : const TextStyleConstants.noteCaption(),
+                              ),
+                              const SizedBox(
+                                width: DecorationConstants.titleIconSpace,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              for (final NoteItem iconItem in state
+                                      .allItems[currentTime
+                                          .addDays(dayLater)
+                                          .toNoteId()]
+                                      ?.noteItemList
+                                      .cast<NoteItem>() ??
+                                  [])
+                                Icon(
+                                  IconData(
+                                    iconItem.iconCode,
+                                    fontFamily: 'MaterialIcons',
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    content: Column(
                       children: [
-                        Text(
-                          StringConstants.days[
-                                  currentTime.addDays(dayLater).weekday] ??
-                              'Error',
-                          style: const TextStyleConstants.noteCaption(),
-                        ),
-                        const SizedBox(
-                          width: DecorationConstants.titleIconSpace,
-                        ),
-                        for (final NoteItem iconItem in state
+                        for (final NoteItem messageItem in state
                                 .allItems[
                                     currentTime.addDays(dayLater).toNoteId()]
                                 ?.noteItemList
                                 .cast<NoteItem>() ??
                             [])
-                          Icon(
-                            IconData(
-                              iconItem.iconCode,
-                              fontFamily: 'MaterialIcons',
+                          Dismissible(
+                            key: GlobalKey(),
+                            onDismissed: (direction) {
+                              context
+                                  .read<NoteCubit>()
+                                  .removeItems(messageItem);
+                            },
+                            child: Padding(
+                              padding: DecorationConstants.noteContainerPadding,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: DecorationConstants.noteContainerColor,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: DecorationConstants
+                                          .noteContainerItemPadding,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${messageItem.time.year}-${messageItem.time.month}-${messageItem.time.day}',
+                                            style: const TextStyleConstants
+                                                .noteDateAndHour(),
+                                          ),
+                                          Text(
+                                            '${messageItem.time.hour}:${messageItem.time.minute}',
+                                            style: const TextStyleConstants
+                                                .noteDateAndHour(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 2,
+                                      color: DecorationConstants.dividerColor,
+                                    ),
+                                    Padding(
+                                      padding: DecorationConstants
+                                          .noteContainerMessagePadding,
+                                      child: Text(
+                                        messageItem.message,
+                                        style:
+                                            const TextStyleConstants.noteText(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                       ],
                     ),
-                    content: const Text('data'),
                   ),
               ],
             );

@@ -24,7 +24,7 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
             final item = await addNoteItemShowDialog(context);
             if (item is NoteItem) {
               await context.read<NoteCubit>().addItem(item);
-            }
+            } else {}
           },
           child: const Icon(Icons.add),
         ),

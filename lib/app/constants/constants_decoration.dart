@@ -4,10 +4,12 @@ final class DecorationConstants {
   static const double noteContainerHeight = 80;
   static const Color noteContainerColor = Colors.amber;
   static const EdgeInsets noteContainerPadding = EdgeInsets.all(8);
-  static const EdgeInsets noteContainerItemPadding = EdgeInsets.all(8);
+  static const EdgeInsets noteContainerItemPadding =
+      EdgeInsets.fromLTRB(8, 8, 8, 0);
   static const EdgeInsets noteContainerMessagePadding =
       EdgeInsets.fromLTRB(8, 0, 8, 8);
   static const double titleIconSpace = 5;
+  static Color dividerColor = Colors.black.withOpacity(0.2);
 
   static const double showDialogHeight = 350;
   static const EdgeInsets showDialogPadding = EdgeInsets.all(12);

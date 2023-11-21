@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:spaced_repetition_notes/app/extention/note_id_extention.dart';
 import 'package:spaced_repetition_notes/features/home_page/view_modal/note_cubit_state.dart';
 import 'package:spaced_repetition_notes/service/cache_manager.dart';
 import 'package:spaced_repetition_notes/service/modal/note.dart';
@@ -10,9 +11,16 @@ class NoteCubit extends Cubit<CubitBaseState> {
   NoteCubit(this.cacheManager) : super(CubitInitialState());
   final CacheManager cacheManager;
   final time = DateTime.now();
-  int currentStep = DateTime.now().weekday;
+  int currentStep = 6;
   IconData? selectedIconData;
   Icon? selectedIcon;
+  int sayac = -1;
+
+  int getIndex() {
+    sayac++;
+    sayac = sayac % 7;
+    return sayac;
+  }
 
   ///I have collected the note lists here
   final weekNotes = <int, Note>{};
@@ -34,7 +42,7 @@ class NoteCubit extends Cubit<CubitBaseState> {
     await addtreeItems(6);
 
     emit(CubitAddItemState());
-    emit(CubitSuccessState(allItems: weekNotes));
+    getWeekDayItems();
   }
 
   void refreshItems() {
@@ -44,16 +52,19 @@ class NoteCubit extends Cubit<CubitBaseState> {
   void removeItems(NoteItem item) {
     cacheManager.removeNote(item);
     emit(CubitRemoveItemState());
+    getWeekDayItems();
   }
 
   Future<void> clearItems() async {
     await cacheManager.clearNotes();
     emit(CubitRemoveItemState());
+    getWeekDayItems();
   }
 
   void changeStep(int step) {
     currentStep = step;
     emit(CubitPressStepState());
+    emit(CubitSuccessState(allItems: weekNotes));
   }
 
   void getWeekDayItems() {
@@ -63,15 +74,16 @@ class NoteCubit extends Cubit<CubitBaseState> {
         final dayItems =
             cacheManager.getCurrentDayNotes(time.add(Duration(days: dayLater)));
         if (dayItems == null) {
-          weekNotes[time.add(Duration(days: dayLater)).weekday] = Note(
+          weekNotes[time.add(Duration(days: dayLater)).toNoteId()] = Note(
             time: time,
             noteItemList: HiveList(cacheManager.noteItemBox),
           );
         } else {
-          weekNotes[time.add(Duration(days: dayLater)).weekday] =
+          weekNotes[time.add(Duration(days: dayLater)).toNoteId()] =
               Note(time: time, noteItemList: dayItems);
         }
       }
+
       emit(CubitSuccessState(allItems: weekNotes));
     } catch (e) {
       emit(CubitErrorState(errorText: 'We received an error pulling data'));
