@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final class DecorationConstants {
+  //Note side
   static const double noteContainerHeight = 80;
   static const Color noteContainerColor = Colors.amber;
   static const EdgeInsets noteContainerPadding = EdgeInsets.all(8);
@@ -11,6 +12,7 @@ final class DecorationConstants {
   static const double titleIconSpace = 5;
   static Color dividerColor = Colors.black.withOpacity(0.2);
 
+  ///Dialog side
   static const double showDialogHeight = 350;
   static const EdgeInsets showDialogPadding = EdgeInsets.all(12);
   static const int animatedSwitcherDuration = 300;

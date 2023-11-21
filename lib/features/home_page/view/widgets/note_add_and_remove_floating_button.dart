@@ -29,8 +29,30 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         FloatingActionButton(
-          onPressed: () {
-            context.read<NoteCubit>().clearItems();
+          onPressed: () async {
+            final removeAll = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text(StringConstants.alertDialogClearAllData),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Icon(Icons.done),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+            );
+            removeAll == true
+                ? await context.read<NoteCubit>().clearItems()
+                : null;
           },
           child: const Icon(Icons.cleaning_services),
         ),

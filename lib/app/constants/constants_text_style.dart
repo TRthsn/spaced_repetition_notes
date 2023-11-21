@@ -16,7 +16,7 @@ class TextStyleConstants extends TextStyle {
       : super(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: Colors.black,
+          color: Colors.orange,
         );
   const TextStyleConstants.noteDateAndHour()
       : super(
