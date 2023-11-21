@@ -34,7 +34,7 @@ class DialogAddButton extends StatelessWidget {
             message: textEditingController.text,
             iconCode: selectedIconData?.codePoint ?? Icons.favorite.codePoint,
           );
-
+          textEditingController.clear();
           Navigator.of(context).pop(item);
         },
         icon: const Row(
