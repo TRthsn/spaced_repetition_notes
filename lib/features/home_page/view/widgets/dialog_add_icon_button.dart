@@ -18,43 +18,43 @@ class DialogAddIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: IconButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              DecorationConstants.showDialogIconButtonBackgroundColor,
-          fixedSize: Size(
-            MediaQuery.of(context).size.width / 2,
-            DecorationConstants.showDialogButtonHeight,
-          ),
-          shape: const RoundedRectangleBorder(),
+    return IconButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            DecorationConstants.showDialogIconButtonBackgroundColor,
+        fixedSize: Size(
+          MediaQuery.of(context).size.width / 3,
+          DecorationConstants.showDialogButtonHeight,
         ),
-        highlightColor: DecorationConstants.showDialogIconButtonHighlightColor,
-        color: DecorationConstants.showDialogIconButtonColor,
-        onPressed: () async {
-          Future<Icon> pickIcon(
-            BuildContext context,
-          ) async {
-            context.read<NoteCubit>().selectedIconData =
-                await FlutterIconPicker.showIconPicker(
-              context,
-              iconPackModes: [
-                IconPack.material,
-              ],
-            );
-            setState(() {});
+        shape: const RoundedRectangleBorder(),
+      ),
+      highlightColor: DecorationConstants.showDialogIconButtonHighlightColor,
+      color: DecorationConstants.showDialogIconButtonColor,
+      onPressed: () async {
+        Future<Icon> pickIcon(
+          BuildContext context,
+        ) async {
+          context.read<NoteCubit>().selectedIconData =
+              await FlutterIconPicker.showIconPicker(
+            context,
+            iconPackModes: [
+              IconPack.material,
+            ],
+          );
+          setState(() {});
 
-            return context.read<NoteCubit>().selectedIcon =
-                Icon(context.read<NoteCubit>().selectedIconData);
-          }
+          return context.read<NoteCubit>().selectedIcon =
+              Icon(context.read<NoteCubit>().selectedIconData);
+        }
 
-          await pickIcon(context);
-        },
-        icon: const Row(
+        await pickIcon(context);
+      },
+      icon: const FittedBox(
+        child: Row(
           children: [
             Icon(Icons.add_a_photo),
             SizedBox(
-              width: DecorationConstants.showDialogMediumHeight,
+              width: DecorationConstants.showDialogSmallHeight,
             ),
             Text(
               StringConstants.showDialogIconGiriniz,

@@ -12,6 +12,12 @@ class TextStyleConstants extends TextStyle {
           fontWeight: FontWeight.w700,
           color: Colors.black87,
         );
+  const TextStyleConstants.noteCaptionDarkMode()
+      : super(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        );
   const TextStyleConstants.noteCaptionCurrentDay()
       : super(
           fontSize: 20,

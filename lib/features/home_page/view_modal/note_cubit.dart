@@ -12,7 +12,9 @@ class NoteCubit extends Cubit<CubitBaseState> {
   final CacheManager cacheManager;
   final time = DateTime.now();
   int currentStep = 6;
+
   IconData? selectedIconData;
+  bool isSaveButton = false;
   Icon? selectedIcon;
   int sayac = -1;
 
@@ -25,7 +27,7 @@ class NoteCubit extends Cubit<CubitBaseState> {
   ///I have collected the note lists here
   final weekNotes = <int, Note>{};
 
-  Future<void> addItem(NoteItem note) async {
+  Future<void> addSpacedItem(NoteItem note) async {
     Future<void> addtreeItems(int nextDay) async {
       await cacheManager.addNote(
         NoteItem(
@@ -41,6 +43,12 @@ class NoteCubit extends Cubit<CubitBaseState> {
     await addtreeItems(3);
     await addtreeItems(6);
 
+    emit(CubitAddItemState());
+    getWeekDayItems();
+  }
+
+  Future<void> addItem(NoteItem noteItem) async {
+    await cacheManager.addNote(noteItem);
     emit(CubitAddItemState());
     getWeekDayItems();
   }
@@ -67,6 +75,7 @@ class NoteCubit extends Cubit<CubitBaseState> {
     emit(CubitSuccessState(allItems: weekNotes));
   }
 
+  ///set all the notes of the week
   void getWeekDayItems() {
     emit(CubitLoadingState());
     try {

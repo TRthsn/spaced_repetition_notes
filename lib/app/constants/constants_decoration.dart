@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 final class DecorationConstants {
   //Note side
   static const double noteContainerHeight = 80;
-  static const Color noteContainerColor = Colors.amber;
+  static const Color noteContainerColor = Colors.orange;
   static const EdgeInsets noteContainerPadding = EdgeInsets.all(8);
   static const EdgeInsets noteContainerItemPadding =
       EdgeInsets.fromLTRB(8, 8, 8, 0);
@@ -20,10 +20,13 @@ final class DecorationConstants {
   static const double showDialogSmallHeight = 10;
   static const double showDialogMediumHeight = 30;
   static const double showDialogButtonHeight = 70;
-  static const Color showDialogIconButtonColor = Colors.amber;
+  static const Color showDialogIconButtonColor = Colors.orange;
   static const Color showDialogIconButtonHighlightColor = Colors.blue;
   static const Color showDialogIconButtonBackgroundColor = Colors.green;
-  static const Color showDialogEkleButtonColor = Colors.amber;
+  static const Color showDialogSpacedEkleButtonColor = Colors.orange;
+  static const Color showDialogSpacedEkleButtonHighlightColor = Colors.blue;
+  static const Color showDialogSpacedEkleButtonBackgroundColor = Colors.teal;
+  static const Color showDialogEkleButtonColor = Colors.orange;
   static const Color showDialogEkleButtonHighlightColor = Colors.blue;
-  static const Color showDialogEkleButtonBackgroundColor = Colors.teal;
+  static const Color showDialogEkleButtonBackgroundColor = Colors.indigo;
 }

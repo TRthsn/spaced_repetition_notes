@@ -7,9 +7,11 @@ class CacheManager {
   CacheManager._();
   factory CacheManager.init() => _cacheManager ??= CacheManager._();
   static CacheManager? _cacheManager;
+  DateTime currentNoteTime = DateTime.now();
 
   final noteItemBox = Hive.box<NoteItem>('NoteItems');
   final noteBox = Hive.box<Note>('Notes');
+  final themeBox = Hive.box<bool>('Theme');
 
   Future<void> addNote(NoteItem item) async {
     final currentDayNote = noteBox.get(item.time.toNoteId());
@@ -26,6 +28,14 @@ class CacheManager {
       currentDayNote.noteItemList.add(item);
       await currentDayNote.save();
     }
+  }
+
+  void setTheme(bool isLightTheme) {
+    themeBox.put('theme', isLightTheme);
+  }
+
+  bool getTheme() {
+    return themeBox.get('theme') ?? false;
   }
 
   void removeNote(NoteItem item) {

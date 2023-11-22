@@ -11,6 +11,7 @@ final class MainInit {
     Hive.registerAdapter(NoteItemAdapter());
     await Hive.openBox<NoteItem>('NoteItems');
     await Hive.openBox<Note>('Notes');
+    await Hive.openBox<bool>('Theme');
     Bloc.observer = const CubitObserver();
   }
 }

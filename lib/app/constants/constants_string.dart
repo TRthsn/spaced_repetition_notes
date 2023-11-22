@@ -12,5 +12,6 @@ final class StringConstants {
   static const showDialogNoteGiriniz = 'Note Giriniz';
   static const showDialogIconGiriniz = 'Icon Ekle';
   static const showDialogSave = 'Kaydet';
+  static const showDialogSpacedSave = 'Aralıklı Kaydet';
   static const alertDialogClearAllData = 'Tüm kayıtları silmek istiyormusun?';
 }

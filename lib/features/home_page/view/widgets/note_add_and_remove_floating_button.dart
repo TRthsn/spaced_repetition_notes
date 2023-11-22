@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:spaced_repetition_notes/app/constants/constants_decoration.dart';
 import 'package:spaced_repetition_notes/app/constants/constants_string.dart';
-import 'package:spaced_repetition_notes/features/home_page/view/widgets/dialog_add_button.dart';
 import 'package:spaced_repetition_notes/features/home_page/view/widgets/dialog_add_icon_button.dart';
+import 'package:spaced_repetition_notes/features/home_page/view/widgets/dialog_spaced_add_button.dart';
 import 'package:spaced_repetition_notes/features/home_page/view_modal/note_cubit.dart';
 import 'package:spaced_repetition_notes/service/cache_manager.dart';
 import 'package:spaced_repetition_notes/service/modal/note_item.dart';
 
 class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
   NoteAddAndRemoveFloatingButtons({
+    required this.textEditingController,
     super.key,
   });
-  final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController textEditingController;
+  bool isSaveButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,12 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
           onPressed: () async {
             final item = await addNoteItemShowDialog(context);
             if (item is NoteItem) {
-              await context.read<NoteCubit>().addItem(item);
+              if (isSaveButton) {
+                await context.read<NoteCubit>().addItem(item);
+                isSaveButton = false;
+              } else {
+                await context.read<NoteCubit>().addSpacedItem(item);
+              }
             } else {}
           },
           child: const Icon(Icons.add),
@@ -83,9 +91,35 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
                                 milliseconds: DecorationConstants
                                     .animatedSwitcherDuration,
                               ),
-                              child: Icon(
-                                context.watch<NoteCubit>().selectedIconData,
-                                size: DecorationConstants.showDialogIconSize,
+                              child: InkWell(
+                                onTap: () async {
+                                  Future<Icon> pickIcon(
+                                    BuildContext context,
+                                  ) async {
+                                    context.read<NoteCubit>().selectedIconData =
+                                        await FlutterIconPicker.showIconPicker(
+                                      context,
+                                      iconPackModes: [
+                                        IconPack.material,
+                                      ],
+                                    );
+                                    setState(() {});
+
+                                    return context
+                                        .read<NoteCubit>()
+                                        .selectedIcon = Icon(
+                                      context
+                                          .read<NoteCubit>()
+                                          .selectedIconData,
+                                    );
+                                  }
+
+                                  await pickIcon(context);
+                                },
+                                child: Icon(
+                                  context.watch<NoteCubit>().selectedIconData,
+                                  size: DecorationConstants.showDialogIconSize,
+                                ),
                               ),
                             ),
                           ),
@@ -103,24 +137,7 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
                           const SizedBox(
                             height: DecorationConstants.showDialogMediumHeight,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              DialogAddIconButton(
-                                context: context,
-                                setState: setState,
-                              ),
-                              const SizedBox(
-                                width:
-                                    DecorationConstants.showDialogSmallHeight,
-                              ),
-                              DialogAddButton(
-                                textEditingController: textEditingController,
-                                selectedIconData:
-                                    context.watch<NoteCubit>().selectedIconData,
-                              ),
-                            ],
-                          ),
+                          DialogButtons(context, setState),
                         ],
                       ),
                     ),
@@ -131,6 +148,77 @@ class NoteAddAndRemoveFloatingButtons extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Row DialogButtons(BuildContext context, StateSetter setState) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: DialogAddIconButton(
+            context: context,
+            setState: setState,
+          ),
+        ),
+        const SizedBox(
+          width: DecorationConstants.showDialogSmallHeight,
+        ),
+        Expanded(
+          child: DialogSpacedAddButton(
+            textEditingController: textEditingController,
+            selectedIconData: context.watch<NoteCubit>().selectedIconData,
+          ),
+        ),
+        const SizedBox(
+          width: DecorationConstants.showDialogSmallHeight,
+        ),
+        Expanded(
+          child: DialogAddButton(context),
+        ),
+      ],
+    );
+  }
+
+  IconButton DialogAddButton(BuildContext context) {
+    return IconButton(
+      style: ElevatedButton.styleFrom(
+        fixedSize: Size(
+          MediaQuery.of(context).size.width / 3,
+          DecorationConstants.showDialogButtonHeight,
+        ),
+        backgroundColor:
+            DecorationConstants.showDialogEkleButtonBackgroundColor,
+        shape: const RoundedRectangleBorder(),
+      ),
+      highlightColor:
+          DecorationConstants.showDialogSpacedEkleButtonHighlightColor,
+      color: DecorationConstants.showDialogSpacedEkleButtonColor,
+      onPressed: () {
+        final item = NoteItem(
+          time: context.read<NoteCubit>().cacheManager.currentNoteTime,
+          message: textEditingController.text,
+          iconCode: context.read<NoteCubit>().selectedIconData?.codePoint ??
+              Icons.favorite.codePoint,
+        );
+        textEditingController.clear();
+        isSaveButton = true;
+
+        Navigator.of(context).pop<NoteItem>(item);
+      },
+      icon: const FittedBox(
+        child: Row(
+          children: [
+            Icon(Icons.save_as_outlined),
+            SizedBox(
+              width: DecorationConstants.showDialogSmallHeight,
+            ),
+            Text(
+              StringConstants.showDialogSave,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
